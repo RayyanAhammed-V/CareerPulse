@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane styleClass="root-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.careerpulse.controller.AdminDashboardController">
+    <left>
+        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            <Label text="CAREERPULSE" styleClass="sidebar-title"/>
+            
+            <Button text="System Overview" styleClass="nav-button, nav-active" maxWidth="Infinity"/>
+            <Button text="Manage Users" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="Scoring Rules" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="System Logs" styleClass="nav-button" maxWidth="Infinity"/>
+            
+            <Region VBox.vgrow="ALWAYS" />
+            <Button text="Logout" onAction="#handleLogout" styleClass="nav-button, danger-text" maxWidth="Infinity"/>
+        </VBox>
+    </left>
+    
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="30" right="40" bottom="30" left="40"/>
+            </padding>
+            <Label text="Admin Dashboard" styleClass="page-title"/>
+            
+            <HBox spacing="20">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Total Users" styleClass="stat-title"/>
+                    <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="System Status" styleClass="stat-title"/>
+                    <Label text="Online" styleClass="stat-value, success-text"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Recent Activity" styleClass="subtitle-text"/>
+            <ListView fx:id="activityList" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+        </VBox>
+    </center>
+</BorderPane>

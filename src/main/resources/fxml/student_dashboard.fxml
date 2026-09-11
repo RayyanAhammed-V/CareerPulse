@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane styleClass="root-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.careerpulse.controller.StudentDashboardController">
+    <left>
+        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            <Label text="CAREERPULSE" styleClass="sidebar-title"/>
+            
+            <Button text="Dashboard" styleClass="nav-button, nav-active" maxWidth="Infinity"/>
+            <Button text="Profile" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="Skills" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="Projects" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="Employability Score" styleClass="nav-button" maxWidth="Infinity"/>
+            
+            <Region VBox.vgrow="ALWAYS" />
+            <Button text="Logout" onAction="#handleLogout" styleClass="nav-button, danger-text" maxWidth="Infinity"/>
+        </VBox>
+    </left>
+    
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="30" right="40" bottom="30" left="40"/>
+            </padding>
+            <Label text="Student Dashboard" styleClass="page-title"/>
+            
+            <HBox spacing="20">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Employability Score" styleClass="stat-title"/>
+                    <Label fx:id="scoreLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Readiness Level" styleClass="stat-title"/>
+                    <Label fx:id="readinessLabel" text="Needs Improvement" styleClass="stat-value"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

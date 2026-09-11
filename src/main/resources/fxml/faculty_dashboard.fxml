@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane styleClass="root-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.careerpulse.controller.FacultyDashboardController">
+    <left>
+        <VBox styleClass="sidebar" spacing="10" prefWidth="250">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10"/>
+            </padding>
+            <Label text="CAREERPULSE" styleClass="sidebar-title"/>
+            
+            <Button text="Overview" styleClass="nav-button, nav-active" maxWidth="Infinity"/>
+            <Button text="Student Directory" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="Analytics" styleClass="nav-button" maxWidth="Infinity"/>
+            <Button text="Reports" styleClass="nav-button" maxWidth="Infinity"/>
+            
+            <Region VBox.vgrow="ALWAYS" />
+            <Button text="Logout" onAction="#handleLogout" styleClass="nav-button, danger-text" maxWidth="Infinity"/>
+        </VBox>
+    </left>
+    
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="30" right="40" bottom="30" left="40"/>
+            </padding>
+            <Label text="Faculty Dashboard" styleClass="page-title"/>
+            
+            <HBox spacing="20">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Total Students" styleClass="stat-title"/>
+                    <Label fx:id="totalStudentsLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Average Score" styleClass="stat-title"/>
+                    <Label fx:id="avgScoreLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="Placement Ready" styleClass="stat-title"/>
+                    <Label fx:id="readyLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Student Directory Preview" styleClass="subtitle-text"/>
+            
+            <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="regCol" text="Reg. Number" prefWidth="120"/>
+                    <TableColumn fx:id="nameCol" text="Name" prefWidth="200"/>
+                    <TableColumn fx:id="scoreCol" text="Score" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
