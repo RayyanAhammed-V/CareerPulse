@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   const fetchStats = async (role) => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/dashboard/stats?role=${role}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/dashboard/stats?role=${role}`);
       setStats(res.data);
     } catch (err) {
       console.error(err);
