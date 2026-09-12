@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
@@ -12,12 +12,12 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // In production, this URL should come from env vars
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         email,
         password
       });
-      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
     } catch (err) {
       setError('Invalid credentials or server error.');
@@ -54,6 +54,9 @@ export default function Login() {
           {error && <p className="error-text">{error}</p>}
           <button type="submit" className="login-button">Login</button>
         </form>
+        <p className="switch-auth">
+          Don't have an account? <Link to="/signup">Sign up here</Link>
+        </p>
       </div>
     </div>
   );
