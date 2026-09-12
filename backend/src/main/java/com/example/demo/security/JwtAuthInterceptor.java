@@ -23,8 +23,28 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             String token = bearerToken.substring(7);
             if (tokenProvider.validateToken(token)) {
+                String role = tokenProvider.getRoleFromJWT(token);
                 request.setAttribute("userId", tokenProvider.getUserIdFromJWT(token));
-                request.setAttribute("userRole", tokenProvider.getRoleFromJWT(token));
+                request.setAttribute("userRole", role);
+                
+                String path = request.getRequestURI();
+                if (path.startsWith("/api/faculty") && !"FACULTY".equals(role) && !"ADMIN".equals(role)) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return false;
+                }
+                if (path.startsWith("/api/recruiter") && !"RECRUITER".equals(role) && !"ADMIN".equals(role)) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return false;
+                }
+                if (path.startsWith("/api/admin") && !"ADMIN".equals(role)) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return false;
+                }
+                if (path.startsWith("/api/profile") && !"STUDENT".equals(role)) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    return false;
+                }
+
                 return true;
             }
         }
