@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import StudentDashboard from './StudentDashboard';
+import FacultyDashboard from './FacultyDashboard';
+import RecruiterDashboard from './RecruiterDashboard';
+import AdminDashboard from './AdminDashboard';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -41,9 +43,9 @@ export default function Dashboard() {
 
       <main className="dashboard-content">
         {user.role === 'STUDENT' && <StudentDashboard />}
-        {user.role === 'FACULTY' && <div>Faculty Dashboard Under Construction</div>}
-        {user.role === 'RECRUITER' && <div>Recruiter Dashboard Under Construction</div>}
-        {user.role === 'ADMIN' && <div>Admin Dashboard Under Construction</div>}
+        {user.role === 'FACULTY' && <FacultyDashboard />}
+        {user.role === 'RECRUITER' && <RecruiterDashboard />}
+        {user.role === 'ADMIN' && <AdminDashboard />}
       </main>
     </div>
   );
