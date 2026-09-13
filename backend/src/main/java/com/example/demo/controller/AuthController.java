@@ -30,9 +30,9 @@ public class AuthController {
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private AuditLogRepository auditLogRepository;
 
-    // 1. Student Signup
-    @PostMapping("/student/signup")
-    public ResponseEntity<?> studentSignup(@RequestBody Map<String, String> request) {
+    // 1. Universal & Role-Based Signup (Student, Faculty, Recruiter)
+    @PostMapping(value = {"/signup", "/student/signup", "/faculty/signup", "/recruiter/signup"})
+    public ResponseEntity<?> signup(@RequestBody Map<String, String> request, HttpServletRequest httpRequest) {
         try {
             String email = request.get("email");
             String password = request.get("password");
@@ -41,6 +41,22 @@ public class AuthController {
             String phone = request.get("phone");
             String department = request.get("department");
             String degree = request.get("degree");
+            String role = request.get("role");
+
+            String uri = httpRequest.getRequestURI();
+            String targetRole = "ROLE_STUDENT";
+            if (uri.contains("/faculty")) {
+                targetRole = "ROLE_FACULTY";
+            } else if (uri.contains("/recruiter")) {
+                targetRole = "ROLE_RECRUITER";
+            } else if (role != null && !role.isBlank()) {
+                String r = role.toUpperCase();
+                if (r.contains("FACULTY")) {
+                    targetRole = "ROLE_FACULTY";
+                } else if (r.contains("RECRUITER")) {
+                    targetRole = "ROLE_RECRUITER";
+                }
+            }
 
             if (email == null || email.isBlank() || password == null || password.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("error", "Email and password are required."));
@@ -61,26 +77,28 @@ public class AuthController {
             User user = new User();
             user.setEmail(email.trim().toLowerCase());
             user.setPasswordHash(passwordEncoder.encode(password));
-            user.setRole("ROLE_STUDENT");
+            user.setRole(targetRole);
             user.setIsActive(true);
             user.setPasswordResetRequired(false);
             user.setCreatedAt(LocalDateTime.now());
             user = userRepository.save(user);
 
-            // Create Student Profile
-            Student student = new Student();
-            student.setUser(user);
-            String[] names = fullName != null ? fullName.trim().split("\\s+", 2) : new String[]{"Student", ""};
-            student.setFirstName(names[0]);
-            student.setLastName(names.length > 1 ? names[1] : "");
-            student.setPhone(phone);
-            student.setDepartment(department);
-            student.setDegree(degree);
-            student.setEmployabilityScore(0);
-            student.setReadinessLevel("Needs Development");
-            studentRepository.save(student);
+            // If Student, create Student Profile
+            if ("ROLE_STUDENT".equals(targetRole)) {
+                Student student = new Student();
+                student.setUser(user);
+                String[] names = fullName != null ? fullName.trim().split("\\s+", 2) : new String[]{"Student", ""};
+                student.setFirstName(names[0]);
+                student.setLastName(names.length > 1 ? names[1] : "");
+                student.setPhone(phone);
+                student.setDepartment(department != null && !department.isBlank() ? department : "Computer Science & Engineering");
+                student.setDegree(degree != null && !degree.isBlank() ? degree : "B.Tech");
+                student.setEmployabilityScore(0);
+                student.setReadinessLevel("Needs Development");
+                studentRepository.save(student);
+            }
 
-            auditLogRepository.save(new AuditLog("STUDENT", "USER_CREATED", user.getEmail(), "Student self-registration completed"));
+            auditLogRepository.save(new AuditLog(targetRole.replace("ROLE_", ""), "USER_CREATED", user.getEmail(), targetRole.replace("ROLE_", "") + " self-registration completed"));
 
             String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole(), false);
 

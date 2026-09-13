@@ -129,17 +129,17 @@ export default function PortalLogin({
           </button>
         </form>
 
-        {/* Optional Student Signup Link */}
-        {allowSignup ? (
+        {/* Signup / Provisioning Prompt */}
+        {portalType !== 'admin' ? (
           <div className="signup-prompt">
             <span>Don't have an account? </span>
-            <Link to="/student/signup" className="signup-link">
-              Create Student Account
+            <Link to={`/signup?role=${portalType}`} className="signup-link">
+              Create {portalType.charAt(0).toUpperCase() + portalType.slice(1)} Account
             </Link>
           </div>
         ) : (
           <div className="privileged-prompt">
-            <span>Accounts are strictly provisioned by the Administrator.</span>
+            <span>Administrative access is strictly restricted.</span>
           </div>
         )}
 

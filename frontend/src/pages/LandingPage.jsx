@@ -15,10 +15,10 @@ export default function LandingPage() {
         </div>
         <div className="header-actions">
           <button onClick={() => navigate('/student/login')} className="btn-outline">
-            Student Login
+            Student Portal
           </button>
-          <button onClick={() => navigate('/student/signup')} className="btn-primary">
-            Create Student Account
+          <button onClick={() => navigate('/signup')} className="btn-primary">
+            Sign Up
           </button>
         </div>
       </header>
@@ -34,11 +34,11 @@ export default function LandingPage() {
           Measure your skills, experience and academic readiness for your career journey with an objective, authoritative calculation engine.
         </p>
         <div className="hero-cta-group">
-          <button onClick={() => navigate('/student/signup')} className="btn-primary hero-btn">
+          <button onClick={() => navigate('/signup')} className="btn-primary hero-btn">
             Get Started — Sign Up Free
           </button>
           <button onClick={() => navigate('/student/login')} className="btn-secondary hero-btn">
-            Sign In to Student Portal
+            Student Portal
           </button>
         </div>
       </section>

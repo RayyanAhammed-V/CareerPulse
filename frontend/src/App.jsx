@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import PortalLogin from './pages/PortalLogin';
-import StudentSignup from './pages/StudentSignup';
+import Signup from './pages/Signup';
 import ChangePassword from './pages/ChangePassword';
 import StudentDashboard from './pages/StudentDashboard';
 import FacultyDashboard from './pages/FacultyDashboard';
@@ -69,8 +69,11 @@ function App() {
           }
         />
 
-        {/* Student Signup */}
-        <Route path="/student/signup" element={<StudentSignup />} />
+        {/* Universal & Role-Based Signup */}
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/student/signup" element={<Signup />} />
+        <Route path="/faculty/signup" element={<Signup />} />
+        <Route path="/recruiter/signup" element={<Signup />} />
 
         {/* Forced Password Reset */}
         <Route path="/change-password" element={<ChangePassword />} />
@@ -83,7 +86,6 @@ function App() {
 
         {/* Legacy redirects & Catch-all */}
         <Route path="/login" element={<Navigate to="/" replace />} />
-        <Route path="/signup" element={<Navigate to="/student/signup" replace />} />
         <Route path="/dashboard" element={<Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
