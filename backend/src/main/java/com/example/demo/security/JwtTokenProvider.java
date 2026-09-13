@@ -14,7 +14,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret:CareerPulseSuperSecretKeyWhichIsAtLeast32BytesLong}")
+    @Value("${jwt.secret:CareerNavigatorSuperSecretKeyWhichIsAtLeast32BytesLong2026}")
     private String jwtSecret;
 
     @Value("${jwt.expiration:86400000}")
@@ -24,7 +24,7 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(Long userId, String email, String role) {
+    public String generateToken(Long userId, String email, String role, boolean passwordResetRequired) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
@@ -32,10 +32,15 @@ public class JwtTokenProvider {
                 .setSubject(Long.toString(userId))
                 .claim("email", email)
                 .claim("role", role)
+                .claim("passwordResetRequired", passwordResetRequired)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    public String generateToken(Long userId, String email, String role) {
+        return generateToken(userId, email, role, false);
     }
 
     public Long getUserIdFromJWT(String token) {
@@ -56,6 +61,27 @@ public class JwtTokenProvider {
                 .getBody();
 
         return claims.get("role", String.class);
+    }
+
+    public String getEmailFromJWT(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("email", String.class);
+    }
+
+    public Boolean getPasswordResetRequiredFromJWT(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        Boolean resetRequired = claims.get("passwordResetRequired", Boolean.class);
+        return resetRequired != null && resetRequired;
     }
 
     public boolean validateToken(String authToken) {

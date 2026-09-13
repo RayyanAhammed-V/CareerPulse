@@ -35,7 +35,7 @@ export default function Signup() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1 className="login-title">CAREERPULSE</h1>
+        <h1 className="login-title">CAREER NAVIGATOR</h1>
         <p className="login-subtitle">Create a Student Account</p>
         
         <form onSubmit={handleSignup}>

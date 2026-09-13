@@ -14,8 +14,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // Handle preflight CORS requests
-        if (request.getMethod().equals("OPTIONS")) {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true;
         }
 
@@ -23,33 +22,55 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             String token = bearerToken.substring(7);
             if (tokenProvider.validateToken(token)) {
+                Long userId = tokenProvider.getUserIdFromJWT(token);
                 String role = tokenProvider.getRoleFromJWT(token);
-                request.setAttribute("userId", tokenProvider.getUserIdFromJWT(token));
+                String email = tokenProvider.getEmailFromJWT(token);
+
+                request.setAttribute("userId", userId);
                 request.setAttribute("userRole", role);
-                
+                request.setAttribute("userEmail", email);
+
                 String path = request.getRequestURI();
-                if (path.startsWith("/api/faculty") && !"FACULTY".equals(role) && !"ADMIN".equals(role)) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    return false;
-                }
-                if (path.startsWith("/api/recruiter") && !"RECRUITER".equals(role) && !"ADMIN".equals(role)) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    return false;
-                }
-                if (path.startsWith("/api/admin") && !"ADMIN".equals(role)) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    return false;
-                }
-                if (path.startsWith("/api/profile") && !"STUDENT".equals(role)) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    return false;
+                String normRole = role != null ? role.replace("ROLE_", "").toUpperCase() : "";
+
+                // RBAC checks
+                if (path.startsWith("/api/admin")) {
+                    if (!"ADMIN".equals(normRole)) {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\": \"Forbidden: Admin access required\"}");
+                        return false;
+                    }
+                } else if (path.startsWith("/api/faculty")) {
+                    if (!"FACULTY".equals(normRole) && !"ADMIN".equals(normRole)) {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\": \"Forbidden: Faculty access required\"}");
+                        return false;
+                    }
+                } else if (path.startsWith("/api/recruiter")) {
+                    if (!"RECRUITER".equals(normRole) && !"ADMIN".equals(normRole)) {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\": \"Forbidden: Recruiter access required\"}");
+                        return false;
+                    }
+                } else if (path.startsWith("/api/students/me")) {
+                    if (!"STUDENT".equals(normRole) && !"ADMIN".equals(normRole)) {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\": \"Forbidden: Student access required\"}");
+                        return false;
+                    }
                 }
 
                 return true;
             }
         }
-        
+
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\": \"Unauthorized: Please log in\"}");
         return false;
     }
 }

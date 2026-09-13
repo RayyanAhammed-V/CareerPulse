@@ -33,7 +33,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <nav className="dashboard-nav">
-        <div className="nav-brand">CAREERPULSE</div>
+        <div className="nav-brand">CAREER NAVIGATOR</div>
         <div className="nav-user">
           <span className="user-role badge">{user.role}</span>
           <span className="user-email">{user.email}</span>

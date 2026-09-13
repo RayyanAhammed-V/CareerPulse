@@ -27,7 +27,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1 className="login-title">CAREERPULSE</h1>
+        <h1 className="login-title">CAREER NAVIGATOR</h1>
         <p className="login-subtitle">Sign in to your account</p>
         
         <form onSubmit={handleLogin}>
