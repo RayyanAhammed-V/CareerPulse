@@ -301,17 +301,73 @@
 
 @media (max-width: 768px) {
   .landing-header {
-    padding: 16px 20px;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .brand-text {
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+  .header-actions {
+    gap: 8px;
+  }
+  .header-actions .btn-outline,
+  .header-actions .btn-primary {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+  .hero-section {
+    padding: 48px 16px 40px;
   }
   .hero-title {
-    font-size: 34px;
+    font-size: clamp(28px, 7.5vw, 42px);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .hero-subtitle {
+    font-size: 15px;
+    margin-bottom: 28px;
+    line-height: 1.5;
   }
   .portals-section {
-    padding: 40px 20px;
+    padding: 36px 16px;
+  }
+  .section-title {
+    font-size: 26px;
+  }
+  .portals-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .portal-card {
+    padding: 20px 16px;
+  }
+  .features-section {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 36px auto;
+    padding: 0 16px;
   }
   .landing-footer {
-    padding: 24px 20px;
+    padding: 24px 16px;
     flex-direction: column;
     text-align: center;
+    gap: 16px;
+  }
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
   }
 }
+
+@media (max-width: 480px) {
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-cta-group .hero-btn {
+    width: 100%;
+  }
+}
+

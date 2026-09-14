@@ -324,3 +324,68 @@ tr:hover td {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Responsive Grid Form Utilities */
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-row-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+/* Mobile & Touch Optimizations */
+@media (max-width: 768px) {
+  /* Prevent iOS Safari 16px auto-zoom on form controls */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  /* Collapse 2-column and 3-column form rows on mobile */
+  .form-row-2col,
+  .form-row-3col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Better touch targets for interactive elements */
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline,
+  .btn-danger {
+    min-height: 42px;
+    padding: 10px 16px;
+  }
+
+  /* Full-width and touch-friendly modals on mobile */
+  .modal-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    width: 100%;
+    max-height: 88vh;
+    padding: 20px 16px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /* Table momentum scrolling on iOS and subtle scroll cues */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-sm);
+  }
+
+  th, td {
+    padding: 10px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+

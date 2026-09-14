@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { prewarmServer } from '../api/client';
 import './LandingPage.css';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Non-blocking pre-warm to wake up server before user navigates to portals
+    prewarmServer();
+  }, []);
 
   return (
     <div className="landing-container">

@@ -140,42 +140,48 @@ public class AuthController {
 
     // Common authentication helper
     private ResponseEntity<?> processLogin(String email, String password, String expectedRole) {
-        if (email == null || email.isBlank() || password == null || password.isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Email and password are required."));
+        try {
+            if (email == null || email.isBlank() || password == null || password.isBlank()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Email and password are required."));
+            }
+
+            Optional<User> userOpt = userRepository.findByEmail(email.trim().toLowerCase());
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password."));
+            }
+
+            User user = userOpt.get();
+
+            if (Boolean.FALSE.equals(user.getIsActive())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Your account has been deactivated. Please contact the administrator."));
+            }
+
+            // Verify password
+            boolean passwordMatches = passwordEncoder.matches(password, user.getPasswordHash());
+            if (!passwordMatches) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password."));
+            }
+
+            // Verify role access (ROLE_ADMIN has super-access across portals)
+            String userRole = user.getRole();
+            if (!"ROLE_ADMIN".equals(userRole) && !expectedRole.equals(userRole)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Unauthorized portal access for your account role."));
+            }
+
+            boolean resetRequired = Boolean.TRUE.equals(user.getPasswordResetRequired());
+            String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole(), resetRequired);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", sanitizeUser(user));
+            response.put("role", user.getRole());
+            response.put("passwordResetRequired", resetRequired);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "error", "Authentication error: " + (e.getMessage() != null ? e.getMessage() : "Database connection issue, please try again.")
+            ));
         }
-
-        Optional<User> userOpt = userRepository.findByEmail(email.trim().toLowerCase());
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password."));
-        }
-
-        User user = userOpt.get();
-
-        if (Boolean.FALSE.equals(user.getIsActive())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Your account has been deactivated. Please contact the administrator."));
-        }
-
-        // Verify password
-        boolean passwordMatches = passwordEncoder.matches(password, user.getPasswordHash());
-        if (!passwordMatches) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password."));
-        }
-
-        // Verify role access (ROLE_ADMIN has super-access across portals)
-        String userRole = user.getRole();
-        if (!"ROLE_ADMIN".equals(userRole) && !expectedRole.equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Unauthorized portal access for your account role."));
-        }
-
-        boolean resetRequired = Boolean.TRUE.equals(user.getPasswordResetRequired());
-        String token = tokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole(), resetRequired);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("user", sanitizeUser(user));
-        response.put("role", user.getRole());
-        response.put("passwordResetRequired", resetRequired);
-        return ResponseEntity.ok(response);
     }
 
     // 6. Force / Change Password

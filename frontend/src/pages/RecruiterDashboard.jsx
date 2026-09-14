@@ -197,7 +197,7 @@ export default function RecruiterDashboard() {
             <button onClick={handleResetFilter} className="btn-primary" style={{ marginTop: '16px' }}>Reset Filters</button>
           </div>
         ) : (
-          <div className="items-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}>
+          <div className="recruiter-candidates-grid">
             {candidates.map((c) => (
               <div key={c.studentId} className="card item-card" style={{ padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -312,7 +312,7 @@ export default function RecruiterDashboard() {
                   ))}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+                <div className="modal-actions" style={{ marginTop: '20px' }}>
                   <button onClick={closeCandidateModal} className="btn-secondary">Close Candidate View</button>
                 </div>
               </div>

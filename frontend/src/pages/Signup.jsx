@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import apiClient from '../api/client';
+import apiClient, { prewarmServer, extractErrorMessage } from '../api/client';
 import './PortalLogin.css';
 
 export default function Signup() {
@@ -31,6 +31,10 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    prewarmServer();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -86,7 +90,7 @@ export default function Signup() {
         navigate(redirectPath);
       }, 1500);
     } catch (err) {
-      const msg = err.response?.data?.error || 'Registration failed. Please check your network and try again.';
+      const msg = extractErrorMessage(err, 'Registration failed. Please check your network and try again.');
       setError(msg);
     } finally {
       setLoading(false);
@@ -109,11 +113,11 @@ export default function Signup() {
         </div>
 
         {/* Role Selector Tabs */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '20px' }}>
+        <div className="form-row-3col" style={{ marginBottom: '20px' }}>
           <button
             type="button"
             className={role === 'ROLE_STUDENT' ? 'btn-primary' : 'btn-outline'}
-            style={{ padding: '8px 12px', fontSize: '13px' }}
+            style={{ padding: '8px 8px', fontSize: '13px' }}
             onClick={() => setRole('ROLE_STUDENT')}
           >
             🎓 Student
@@ -121,7 +125,7 @@ export default function Signup() {
           <button
             type="button"
             className={role === 'ROLE_FACULTY' ? 'btn-primary' : 'btn-outline'}
-            style={{ padding: '8px 12px', fontSize: '13px' }}
+            style={{ padding: '8px 8px', fontSize: '13px' }}
             onClick={() => setRole('ROLE_FACULTY')}
           >
             👨‍🏫 Faculty
@@ -129,7 +133,7 @@ export default function Signup() {
           <button
             type="button"
             className={role === 'ROLE_RECRUITER' ? 'btn-primary' : 'btn-outline'}
-            style={{ padding: '8px 12px', fontSize: '13px' }}
+            style={{ padding: '8px 8px', fontSize: '13px' }}
             onClick={() => setRole('ROLE_RECRUITER')}
           >
             💼 Recruiter
@@ -153,7 +157,7 @@ export default function Signup() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-row-2col">
             <div className="form-group">
               <label htmlFor="email">Email Address *</label>
               <input
@@ -182,7 +186,7 @@ export default function Signup() {
 
           {/* Role-specific fields */}
           {role === 'ROLE_STUDENT' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="form-row-2col">
               <div className="form-group">
                 <label htmlFor="department">Department *</label>
                 <select id="department" name="department" value={formData.department} onChange={handleChange}>
@@ -238,7 +242,7 @@ export default function Signup() {
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-row-2col">
             <div className="form-group">
               <label htmlFor="password">Password *</label>
               <input

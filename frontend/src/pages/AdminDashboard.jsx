@@ -239,7 +239,7 @@ export default function AdminDashboard() {
             {activeTab === 'users' && (
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
-                  <form onSubmit={handleSearchUsers} style={{ display: 'flex', gap: '12px', flexGrow: 1, maxWidth: '600px' }}>
+                  <form onSubmit={handleSearchUsers} className="admin-search-form">
                     <input
                       type="text"
                       placeholder="Search by name, email, or user ID..."
@@ -495,7 +495,7 @@ export default function AdminDashboard() {
                 </div>
               ) : null}
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
+              <div className="modal-actions" style={{ marginTop: '20px' }}>
                 <button type="button" onClick={() => setShowCreateModal(false)} className="btn-secondary">Cancel</button>
                 <button type="submit" className="btn-primary">Create User & Issue Temp Credential</button>
               </div>

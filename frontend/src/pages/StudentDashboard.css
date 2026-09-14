@@ -461,20 +461,237 @@
   color: var(--text-muted);
 }
 
+/* Mobile App Bar & Drawer Styles (hidden on desktop) */
+.mobile-appbar {
+  display: none;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.mobile-close-sidebar {
+  display: none;
+}
+
+.sidebar-brand-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 @media (max-width: 1024px) {
   .student-dashboard-layout {
     flex-direction: column;
+    min-height: 100vh;
+    position: relative;
   }
+
+  /* Mobile Top App Bar */
+  .mobile-appbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .mobile-menu-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+  }
+
+  .mobile-menu-toggle:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--color-green-border);
+  }
+
+  .mobile-appbar-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .mobile-brand-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+
+  .mobile-appbar-title .brand-text {
+    font-size: 15px;
+  }
+
+  .mobile-score-pill {
+    padding: 4px 10px;
+  }
+
+  /* Slide-out Mobile Navigation Drawer */
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+  }
+
   .dashboard-sidebar {
-    width: 100%;
-    border-right: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    background-color: var(--bg-secondary);
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
+    border-right: 1px solid var(--border-color);
+    border-bottom: none;
+    height: 100vh;
+  }
+
+  .dashboard-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-brand-wrap {
+    padding-right: 16px;
     border-bottom: 1px solid var(--border-color);
   }
-  .sidebar-nav {
-    flex-direction: row;
-    overflow-x: auto;
+
+  .sidebar-brand-wrap .sidebar-brand {
+    border-bottom: none;
   }
+
+  .mobile-close-sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .sidebar-nav {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Main Topbar on Mobile */
+  .main-topbar {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .topbar-title {
+    font-size: 20px;
+  }
+
+  .topbar-badges {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Content Padding on Mobile */
+  .tab-content {
+    padding: 16px 12px;
+  }
+
+  /* Score Banner */
   .score-banner {
     grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 20px 16px;
+  }
+
+  .score-banner-left {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .score-tier-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .score-tier-details h3 {
+    font-size: 16px;
+  }
+
+  /* Recommendations Mini Cards on Mobile */
+  .rec-card-mini {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .rec-card-mini button {
+    width: 100%;
+  }
+
+  /* CRUD Grid Cards */
+  .items-grid,
+  .recs-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
+
+@media (max-width: 600px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .big-score-dial {
+    width: 96px;
+    height: 96px;
+  }
+
+  .dial-value {
+    font-size: 26px;
+  }
+}
+

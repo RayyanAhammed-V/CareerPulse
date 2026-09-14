@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import apiClient from '../api/client';
+import apiClient, { prewarmServer, checkServerStatus, extractErrorMessage } from '../api/client';
 import './PortalLogin.css';
 
 export default function PortalLogin({
@@ -8,7 +8,7 @@ export default function PortalLogin({
   title,
   subtitle,
   apiEndpoint,
-  allowSignup,
+  _allowSignup,
   dashboardRoute
 }) {
   const navigate = useNavigate();
@@ -16,12 +16,38 @@ export default function PortalLogin({
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('Authenticating...');
+  const [connectionNotice, setConnectionNotice] = useState('');
   const [error, setError] = useState('');
+  const [serverStatus, setServerStatus] = useState('checking'); // 'checking' | 'online' | 'waking'
+  const [isConnectionError, setIsConnectionError] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
+  const timersRef = useRef([]);
+
+  // Check server health and trigger pre-warm on mount
+  useEffect(() => {
+    prewarmServer();
+    checkServerStatus().then((status) => {
+      setServerStatus(status === 'online' ? 'online' : 'waking');
+    });
+
+    return () => {
+      timersRef.current.forEach((t) => clearTimeout(t));
+    };
+  }, []);
+
+  const clearTimers = () => {
+    timersRef.current.forEach((t) => clearTimeout(t));
+    timersRef.current = [];
+    setConnectionNotice('');
+    setLoadingText('Authenticating...');
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setError('');
+    setIsConnectionError(false);
+    clearTimers();
 
     if (!email.trim() || !password) {
       setError('Please enter both email and password.');
@@ -29,6 +55,22 @@ export default function PortalLogin({
     }
 
     setLoading(true);
+    setLoadingText('Checking credentials...');
+
+    // Progressive loading text so user knows exact status
+    const timer1 = setTimeout(() => {
+      setLoadingText('Waking up server container...');
+      setConnectionNotice('Career Navigator server is waking up from standby (free-tier container). Please hold on...');
+    }, 2800);
+    const timer2 = setTimeout(() => {
+      setLoadingText('Connecting to database...');
+      setConnectionNotice('Almost ready! Database session initializing...');
+    }, 8500);
+    const timer3 = setTimeout(() => {
+      setLoadingText('Establishing session...');
+    }, 16000);
+    timersRef.current = [timer1, timer2, timer3];
+
     try {
       const response = await apiClient.post(apiEndpoint, {
         email: email.trim(),
@@ -51,9 +93,18 @@ export default function PortalLogin({
       // Navigate to respective dashboard
       navigate(dashboardRoute);
     } catch (err) {
-      const msg = err.response?.data?.error || 'Unable to connect to Career Navigator. Please try again.';
+      const msg = extractErrorMessage(err, 'Unable to connect to Career Navigator. Please try again.');
       setError(msg);
+
+      // Detect connection or cold-start issues to show the one-click retry button
+      const isConnIssue = !err.response || err.code === 'ECONNABORTED' || [502, 503, 504].includes(err.response?.status);
+      if (isConnIssue) {
+        setIsConnectionError(true);
+        // Trigger another background wake-up attempt so server continues spinning up
+        prewarmServer();
+      }
     } finally {
+      clearTimers();
       setLoading(false);
     }
   };
@@ -67,11 +118,42 @@ export default function PortalLogin({
             <div className="brand-icon">CN</div>
             <span className="brand-text">CAREER NAVIGATOR</span>
           </Link>
+          <div className="server-status-container">
+            <div className={`server-status-pill ${serverStatus}`}>
+              <span className={`status-dot ${serverStatus}`}></span>
+              <span>{serverStatus === 'online' ? 'System Online' : 'Waking Up Server...'}</span>
+            </div>
+          </div>
           <div className="portal-badge-label">{title}</div>
           <h2 className="login-subtitle">{subtitle}</h2>
         </div>
 
-        {error && <div className="alert-error" role="alert">{error}</div>}
+        {/* Cold-Start / Waking Up Notice */}
+        {connectionNotice && (
+          <div className="connection-status-notice">
+            <div className="spinner-dot"></div>
+            <span>{connectionNotice}</span>
+          </div>
+        )}
+
+        {/* Error Alert with Quick Retry */}
+        {error && (
+          <div className="login-error-wrapper">
+            <div className="alert-error" role="alert" style={{ marginBottom: 0 }}>
+              {error}
+            </div>
+            {isConnectionError && (
+              <button
+                type="button"
+                className="login-retry-btn"
+                onClick={() => handleSubmit()}
+                disabled={loading}
+              >
+                ↻ Retry Sign In
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="login-form">
@@ -125,8 +207,13 @@ export default function PortalLogin({
             className="btn-primary login-submit-btn"
             disabled={loading}
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            {loading ? loadingText : 'Sign In'}
           </button>
+          {loading && (
+            <div className="auth-progress-track">
+              <div className="auth-progress-fill"></div>
+            </div>
+          )}
         </form>
 
         {/* Signup / Provisioning Prompt */}

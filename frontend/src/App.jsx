@@ -1,4 +1,6 @@
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { prewarmServer } from './api/client';
 import LandingPage from './pages/LandingPage';
 import PortalLogin from './pages/PortalLogin';
 import Signup from './pages/Signup';
@@ -10,6 +12,18 @@ import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    // 1. Immediately wake up backend container on app visit
+    prewarmServer();
+
+    // 2. Keepalive heartbeat every 5 minutes to prevent Render free-tier from sleeping while user is active
+    const heartbeat = setInterval(() => {
+      prewarmServer();
+    }, 300000);
+
+    return () => clearInterval(heartbeat);
+  }, []);
+
   return (
     <Router>
       <Routes>

@@ -184,3 +184,163 @@
   display: flex;
   justify-content: flex-end;
 }
+
+@media (max-width: 480px) {
+  .portal-login-wrapper {
+    padding: 16px 12px;
+  }
+  .login-card {
+    padding: 24px 18px;
+    border-radius: var(--radius-md);
+  }
+  .login-subtitle {
+    font-size: 20px;
+  }
+  .toggle-password-btn {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    right: 6px;
+  }
+  .login-submit-btn {
+    min-height: 44px;
+  }
+  .modal-actions {
+    flex-direction: column;
+  }
+  .modal-actions button {
+    width: 100%;
+  }
+}
+
+/* Connection Status & Cold-Start Wake-up Banner */
+.connection-status-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #60a5fa;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  margin-bottom: 16px;
+  animation: pulseWakeup 2s infinite ease-in-out;
+  text-align: left;
+}
+
+.connection-status-notice .spinner-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #60a5fa;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px #3b82f6;
+}
+
+@keyframes pulseWakeup {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+.login-error-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.login-retry-btn {
+  align-self: flex-start;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-color);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.login-retry-btn:hover {
+  background: var(--danger-color);
+  color: #ffffff;
+}
+
+/* Server Health Status Pill */
+.server-status-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.server-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-fast);
+}
+
+.server-status-pill.online {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.server-status-pill.waking {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  animation: pulseWakeup 2s infinite ease-in-out;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.status-dot.online {
+  background-color: #34d399;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.status-dot.waking {
+  background-color: #fbbf24;
+  box-shadow: 0 0 6px #f59e0b;
+}
+
+/* Loading Progress Bar below Submit */
+.auth-progress-track {
+  width: 100%;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  margin-top: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.auth-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6, #10b981);
+  background-size: 200% 100%;
+  width: 100%;
+  animation: progressAnim 1.8s infinite linear;
+}
+
+@keyframes progressAnim {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+
+

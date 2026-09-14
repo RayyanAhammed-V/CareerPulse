@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import apiClient from '../api/client';
+import apiClient, { prewarmServer, extractErrorMessage } from '../api/client';
 import './PortalLogin.css';
 
 export default function StudentSignup() {
@@ -19,6 +19,10 @@ export default function StudentSignup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    prewarmServer();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,7 +63,7 @@ export default function StudentSignup() {
         navigate('/student/login');
       }, 1500);
     } catch (err) {
-      const msg = err.response?.data?.error || 'Registration failed. Please check your network and try again.';
+      const msg = extractErrorMessage(err, 'Registration failed. Please check your network and try again.');
       setError(msg);
     } finally {
       setLoading(false);
@@ -95,7 +99,7 @@ export default function StudentSignup() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-row-2col">
             <div className="form-group">
               <label htmlFor="email">Email Address *</label>
               <input
@@ -122,7 +126,7 @@ export default function StudentSignup() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '16px' }}>
+          <div className="form-row-2col">
             <div className="form-group">
               <label htmlFor="department">Department *</label>
               <select
@@ -158,7 +162,7 @@ export default function StudentSignup() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-row-2col">
             <div className="form-group">
               <label htmlFor="password">Password *</label>
               <div className="password-input-wrap">

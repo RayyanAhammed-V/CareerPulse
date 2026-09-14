@@ -6,9 +6,15 @@ import './StudentDashboard.css';
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const selectTab = (tab) => {
+    setActiveTab(tab);
+    setMobileMenuOpen(false);
+  };
 
   // Data states
   const [profileData, setProfileData] = useState(null);
@@ -161,11 +167,46 @@ export default function StudentDashboard() {
 
   return (
     <div className="student-dashboard-layout">
-      {/* Sidebar Navigation */}
-      <aside className="dashboard-sidebar">
-        <div className="sidebar-brand" onClick={() => navigate('/')}>
-          <div className="brand-icon">CN</div>
+      {/* Mobile Top App Bar */}
+      <div className="mobile-appbar">
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle navigation menu"
+        >
+          {mobileMenuOpen ? '✕' : '☰'}
+        </button>
+        <div className="mobile-appbar-title" onClick={() => { navigate('/'); setMobileMenuOpen(false); }}>
+          <div className="brand-icon mobile-brand-icon">CN</div>
           <span className="brand-text">CAREER NAVIGATOR</span>
+        </div>
+        <div className="score-pill mobile-score-pill">
+          <span className="score-num">{currentScore}</span>
+          <span className="score-denom">/100</span>
+        </div>
+      </div>
+
+      {/* Backdrop for Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="sidebar-backdrop" onClick={() => setMobileMenuOpen(false)} />
+      )}
+
+      {/* Sidebar Navigation (Fixed on desktop, Slide-over drawer on mobile) */}
+      <aside className={`dashboard-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+        <div className="sidebar-brand-wrap">
+          <div className="sidebar-brand" onClick={() => { navigate('/'); setMobileMenuOpen(false); }}>
+            <div className="brand-icon">CN</div>
+            <span className="brand-text">CAREER NAVIGATOR</span>
+          </div>
+          <button
+            type="button"
+            className="mobile-close-sidebar"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close navigation"
+          >
+            ✕
+          </button>
         </div>
 
         <div className="user-brief">
@@ -177,46 +218,46 @@ export default function StudentDashboard() {
         </div>
 
         <nav className="sidebar-nav">
-          <button className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}>
+          <button className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => selectTab('dashboard')}>
             <span>Dashboard</span>
           </button>
-          <button className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>
+          <button className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => selectTab('profile')}>
             <span>Profile</span>
           </button>
-          <button className={`nav-item ${activeTab === 'skills' ? 'active' : ''}`} onClick={() => setActiveTab('skills')}>
+          <button className={`nav-item ${activeTab === 'skills' ? 'active' : ''}`} onClick={() => selectTab('skills')}>
             <span>Skills</span>
             <span className="nav-counter">{skills.length}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => setActiveTab('projects')}>
+          <button className={`nav-item ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => selectTab('projects')}>
             <span>Projects</span>
             <span className="nav-counter">{projects.length}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'certifications' ? 'active' : ''}`} onClick={() => setActiveTab('certifications')}>
+          <button className={`nav-item ${activeTab === 'certifications' ? 'active' : ''}`} onClick={() => selectTab('certifications')}>
             <span>Certifications</span>
             <span className="nav-counter">{certifications.length}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'internships' ? 'active' : ''}`} onClick={() => setActiveTab('internships')}>
+          <button className={`nav-item ${activeTab === 'internships' ? 'active' : ''}`} onClick={() => selectTab('internships')}>
             <span>Internships</span>
             <span className="nav-counter">{internships.length}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'hackathons' ? 'active' : ''}`} onClick={() => setActiveTab('hackathons')}>
+          <button className={`nav-item ${activeTab === 'hackathons' ? 'active' : ''}`} onClick={() => selectTab('hackathons')}>
             <span>Hackathons</span>
             <span className="nav-counter">{hackathons.length}</span>
           </button>
-          <button className={`nav-item ${activeTab === 'academics' ? 'active' : ''}`} onClick={() => setActiveTab('academics')}>
+          <button className={`nav-item ${activeTab === 'academics' ? 'active' : ''}`} onClick={() => selectTab('academics')}>
             <span>Academics</span>
           </button>
-          <button className={`nav-item ${activeTab === 'employability' ? 'active' : ''}`} onClick={() => setActiveTab('employability')}>
+          <button className={`nav-item ${activeTab === 'employability' ? 'active' : ''}`} onClick={() => selectTab('employability')}>
             <span>Employability Score</span>
           </button>
-          <button className={`nav-item ${activeTab === 'recommendations' ? 'active' : ''}`} onClick={() => setActiveTab('recommendations')}>
+          <button className={`nav-item ${activeTab === 'recommendations' ? 'active' : ''}`} onClick={() => selectTab('recommendations')}>
             <span>Recommendations</span>
             {recommendations.length > 0 && <span className="nav-counter" style={{ background: '#22C55E', color: '#040805' }}>{recommendations.length}</span>}
           </button>
-          <button className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}>
+          <button className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => selectTab('history')}>
             <span>Score History</span>
           </button>
-          <button className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+          <button className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => selectTab('settings')}>
             <span>Settings</span>
           </button>
         </nav>
@@ -1007,7 +1048,7 @@ export default function StudentDashboard() {
                       onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
                     />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>Role</label>
                       <input
@@ -1071,7 +1112,7 @@ export default function StudentDashboard() {
                       required
                     />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>Issue Date</label>
                       <input
@@ -1133,7 +1174,7 @@ export default function StudentDashboard() {
                       required
                     />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>Start Date</label>
                       <input
@@ -1194,7 +1235,7 @@ export default function StudentDashboard() {
                       onChange={(e) => setFormData({ ...formData, organizer: e.target.value })}
                     />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>Achievement (Winner = 5 pts)</label>
                       <input
@@ -1239,7 +1280,7 @@ export default function StudentDashboard() {
               {/* Profile & Academics Form */}
               {(modalType === 'profile' || modalType === 'academics') && (
                 <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>First Name *</label>
                       <input
@@ -1259,7 +1300,7 @@ export default function StudentDashboard() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>Phone Number</label>
                       <input
@@ -1278,7 +1319,7 @@ export default function StudentDashboard() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>CGPA (0.0 to 10.0)</label>
                       <input
@@ -1301,7 +1342,7 @@ export default function StudentDashboard() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="form-row-2col">
                     <div className="form-group">
                       <label>Degree</label>
                       <input
@@ -1352,7 +1393,7 @@ export default function StudentDashboard() {
                 </>
               )}
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
+              <div className="modal-actions" style={{ marginTop: '20px' }}>
                 <button type="button" onClick={closeModal} className="btn-secondary">
                   Cancel
                 </button>

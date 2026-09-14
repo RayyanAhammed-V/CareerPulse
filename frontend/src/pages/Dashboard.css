@@ -1,6 +1,6 @@
 .dashboard-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #0B0B0B;
   color: #F5F2EA;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

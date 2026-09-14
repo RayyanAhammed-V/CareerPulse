@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '../api/client';
+import apiClient, { extractErrorMessage } from '../api/client';
 import './PortalLogin.css';
 
 export default function ChangePassword() {
@@ -47,7 +47,7 @@ export default function ChangePassword() {
       }, 1500);
 
     } catch (err) {
-      const msg = err.response?.data?.error || 'Unable to update password. Please verify current credentials.';
+      const msg = extractErrorMessage(err, 'Unable to update password. Please verify current credentials.');
       setError(msg);
     } finally {
       setLoading(false);
