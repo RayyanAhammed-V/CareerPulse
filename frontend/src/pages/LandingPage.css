@@ -23,8 +23,8 @@
 .brand-icon {
   width: 36px;
   height: 36px;
-  background-color: var(--color-green-primary);
-  color: var(--text-inverted, #000000);
+  background: linear-gradient(135deg, #F3D99E 0%, #D4AF37 100%);
+  color: #08090C;
   font-weight: 800;
   font-size: 16px;
   display: flex;
@@ -32,7 +32,7 @@
   justify-content: center;
   border-radius: var(--radius-sm);
   letter-spacing: -0.5px;
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 12px rgba(212, 175, 55, 0.35);
 }
 
 .brand-text {
@@ -141,15 +141,33 @@
   border-radius: var(--radius-md);
   padding: 28px;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-normal);
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(229, 192, 123, 0.5), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .portal-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 255, 255, 0.04);
+  border-color: rgba(229, 192, 123, 0.35);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(229, 192, 123, 0.1);
+}
+
+.portal-card:hover::before {
+  opacity: 1;
 }
 
 .portal-badge {
@@ -237,12 +255,13 @@
 .feature-score {
   font-size: 28px;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--color-green-primary);
   line-height: 1;
-  background-color: rgba(255, 255, 255, 0.05);
+  background: rgba(229, 192, 123, 0.08);
   padding: 10px 14px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-green-border);
+  box-shadow: 0 0 14px rgba(229, 192, 123, 0.1);
 }
 
 .feature-info h4 {
@@ -275,7 +294,7 @@
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: var(--text-main);
+  color: var(--color-green-primary);
 }
 
 .footer-copy {

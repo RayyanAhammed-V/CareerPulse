@@ -342,7 +342,7 @@ export default function StudentDashboard() {
             {/* Score & Calculation Dial Banner */}
             <div className="score-banner card">
               <div className="score-banner-left">
-                <div className="big-score-dial">
+                <div className="big-score-dial" style={{ '--score-pct': currentScore }}>
                   <span className="dial-value">{currentScore}</span>
                   <span className="dial-label">Score / 100</span>
                 </div>
