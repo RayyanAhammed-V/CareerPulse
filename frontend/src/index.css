@@ -444,3 +444,99 @@ tr:hover td {
   }
 }
 
+/* ============================================================
+   INTERACTIVE CARD SPOTLIGHT (Mouse Radial Halo)
+   ============================================================ */
+.card, .portal-card, .stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after, .portal-card::after, .stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(350px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(229, 192, 123, 0.09), transparent 65%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.card:hover::after, .portal-card:hover::after, .stat-card:hover::after {
+  opacity: 1;
+}
+
+/* Ensure contents stay above card spotlight */
+.card > *, .portal-card > *, .stat-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================================
+   BESPOKE LUXURY SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1C202E;
+  border-radius: 9999px;
+  border: 1px solid rgba(229, 192, 123, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* ============================================================
+   ATMOSPHERIC FLOATING LUXURY ORBS
+   ============================================================ */
+.ambient-glow-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(100px);
+  z-index: 0;
+  opacity: 0.45;
+}
+
+.ambient-orb-1 {
+  width: 500px;
+  height: 500px;
+  top: -120px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(229, 192, 123, 0.14) 0%, transparent 70%);
+  animation: floatOrb1 20s ease-in-out infinite alternate;
+}
+
+.ambient-orb-2 {
+  width: 440px;
+  height: 440px;
+  bottom: 5%;
+  right: -80px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(229, 192, 123, 0.06) 50%, transparent 70%);
+  animation: floatOrb2 25s ease-in-out infinite alternate;
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(80px, 60px) scale(1.15); }
+  100% { transform: translate(-30px, 90px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-70px, -50px) scale(1.1); }
+  100% { transform: translate(40px, -80px) scale(0.9); }
+}
+
+

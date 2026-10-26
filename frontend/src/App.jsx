@@ -9,6 +9,7 @@ import StudentDashboard from './pages/StudentDashboard';
 import FacultyDashboard from './pages/FacultyDashboard';
 import RecruiterDashboard from './pages/RecruiterDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import CustomCursor from './components/CustomCursor';
 import './App.css';
 
 function App() {
@@ -26,6 +27,13 @@ function App() {
 
   return (
     <Router>
+      {/* Luxury Custom Dynamic Cursor & Card Spotlight */}
+      <CustomCursor />
+      
+      {/* Atmospheric Luminous Ambient Orbs */}
+      <div className="ambient-glow-orb ambient-orb-1" aria-hidden="true" />
+      <div className="ambient-glow-orb ambient-orb-2" aria-hidden="true" />
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
 
