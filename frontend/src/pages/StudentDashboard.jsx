@@ -252,7 +252,7 @@ export default function StudentDashboard() {
           </button>
           <button className={`nav-item ${activeTab === 'recommendations' ? 'active' : ''}`} onClick={() => selectTab('recommendations')}>
             <span>Recommendations</span>
-            {recommendations.length > 0 && <span className="nav-counter" style={{ background: '#22C55E', color: '#040805' }}>{recommendations.length}</span>}
+            {recommendations.length > 0 && <span className="nav-counter" style={{ background: 'var(--color-green-primary)', color: 'var(--text-inverted, #000000)' }}>{recommendations.length}</span>}
           </button>
           <button className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => selectTab('history')}>
             <span>Score History</span>

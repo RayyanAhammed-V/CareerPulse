@@ -134,9 +134,14 @@
 }
 
 .signup-link {
-  color: var(--color-green-primary);
+  color: var(--color-green-light);
   font-weight: 600;
   margin-left: 4px;
+  transition: color var(--transition-fast);
+}
+
+.signup-link:hover {
+  color: #FFFFFF;
 }
 
 .privileged-prompt {

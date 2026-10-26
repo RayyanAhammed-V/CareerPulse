@@ -24,7 +24,7 @@
   width: 36px;
   height: 36px;
   background-color: var(--color-green-primary);
-  color: #080A09;
+  color: var(--text-inverted, #000000);
   font-weight: 800;
   font-size: 16px;
   display: flex;
@@ -32,6 +32,7 @@
   justify-content: center;
   border-radius: var(--radius-sm);
   letter-spacing: -0.5px;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.12);
 }
 
 .brand-text {
@@ -147,8 +148,8 @@
 
 .portal-card:hover {
   transform: translateY(-4px);
-  border-color: var(--color-green-primary);
-  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 255, 255, 0.04);
 }
 
 .portal-badge {
@@ -164,27 +165,27 @@
 }
 
 .student-badge {
-  background: var(--color-green-subtle);
-  color: var(--color-green-light);
-  border: 1px solid var(--color-green-border);
+  background: rgba(129, 140, 248, 0.12);
+  color: #C7D2FE;
+  border: 1px solid rgba(129, 140, 248, 0.28);
 }
 
 .faculty-badge {
-  background: rgba(234, 179, 8, 0.12);
-  color: #FACC15;
-  border: 1px solid rgba(234, 179, 8, 0.3);
+  background: rgba(245, 158, 11, 0.12);
+  color: #FDE68A;
+  border: 1px solid rgba(245, 158, 11, 0.28);
 }
 
 .recruiter-badge {
-  background: rgba(59, 130, 246, 0.0);
-  color: var(--color-green-primary);
-  border: 1px solid var(--border-color);
+  background: rgba(56, 189, 248, 0.12);
+  color: #BAE6FD;
+  border: 1px solid rgba(56, 189, 248, 0.28);
 }
 
 .admin-badge {
-  background: rgba(244, 244, 245, 0.1);
-  color: #E4E4E7;
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.08);
+  color: #F4F4F5;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .portal-title {
@@ -236,12 +237,12 @@
 .feature-score {
   font-size: 28px;
   font-weight: 800;
-  color: var(--color-green-primary);
+  color: var(--text-main);
   line-height: 1;
-  background-color: var(--color-green-subtle);
+  background-color: rgba(255, 255, 255, 0.05);
   padding: 10px 14px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-green-border);
+  border: 1px solid var(--border-color);
 }
 
 .feature-info h4 {
@@ -274,7 +275,7 @@
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: var(--color-green-primary);
+  color: var(--text-main);
 }
 
 .footer-copy {
